@@ -31,6 +31,7 @@ jobs:
           set -e
           
           # Update system
+          pm2 stop all
           cd /var/www
           
           # Clone or pull latest code
@@ -50,7 +51,7 @@ jobs:
           # Backend Setup
           cd /var/www/app/backend
           npm install
-          pm2 restart backend || pm2 start index.js --name backend
+          pm2 start index.js 
           pm2 save
 
           # Restart Apache
