@@ -1,0 +1,58 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main  # Change this to your deployment branch if needed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install SSH Key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy Application to EC2
+      run: |
+        ssh ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+          set -e
+          
+          # Update system
+          cd /var/www
+          
+          # Clone or pull latest code
+          if [ ! -d "/var/www/app" ]; then
+            git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git app
+          else
+            cd app
+            git pull origin main
+          fi
+
+          # Frontend Setup
+          cd /var/www/app/frontend
+          npm install
+          npm run build
+          sudo mv build /var/www/html/frontend
+
+          # Backend Setup
+          cd /var/www/app/backend
+          npm install
+          pm2 restart backend || pm2 start index.js --name backend
+          pm2 save
+
+          # Restart Apache
+          sudo systemctl restart apache2
+        EOF
