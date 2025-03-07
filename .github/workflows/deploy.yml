@@ -32,7 +32,9 @@ jobs:
           
           # Update system
           pm2 stop all
+          
           cd /var/www
+          sudo rm -r -d app
           
           # Clone or pull latest code
           if [ ! -d "/var/www/app" ]; then
