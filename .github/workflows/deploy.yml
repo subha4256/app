@@ -46,8 +46,6 @@ jobs:
 
           # Frontend Setup
           cd /var/www/app/frontend
-          sudo rm package-lock.json 
-          sudo rm -r -d node_modules
           npm install
           npm run build
           
