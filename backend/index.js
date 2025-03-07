@@ -7,7 +7,7 @@ const PORT = 5000;
 app.use(cors());
 
 app.get("/", (req, res) => {
-    res.json({ message: "Hello World from Backend!" });
+    res.json({ message: "Hello World from bibh!" });
 });
 
 app.listen(PORT, () => {
