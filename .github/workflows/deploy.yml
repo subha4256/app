@@ -46,12 +46,16 @@ jobs:
 
           # Frontend Setup
           cd /var/www/app/frontend
+          sudo rm package-lock.json 
+          sudo rm -r -d node_modules
           npm install
           npm run build
-          sudo mv /var/www/app/frontend/build/ /var/www/app/frontend/
+          
 
           # Backend Setup
           cd /var/www/app/backend
+          sudo rm package-lock.json
+          sudo rm -r -d node_modules
           npm install
           pm2 start index.js 
           pm2 save
