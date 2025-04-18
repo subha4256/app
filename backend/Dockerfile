@@ -1,7 +1,7 @@
 # Use an official Node.js runtime as the base image
 FROM node:18-alpine
 
-# Set the working directory in the container
+# Set the working directory in the container bb
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json first to leverage Docker cache
